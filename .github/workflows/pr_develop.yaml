@@ -1,0 +1,41 @@
+name: CI
+
+on:
+	push:
+		branches: [ main, develop ]
+	pull_request:
+		branches: [ main, develop ]
+
+jobs:
+	build:
+		runs-on: ubuntu-latest
+		steps:
+			- name: Checkout
+				uses: actions/checkout@v4
+
+			- name: Setup Node.js
+				uses: actions/setup-node@v4
+				with:
+					node-version: '18'
+					cache: 'npm'
+
+			- name: Install dependencies
+				run: npm ci
+
+			- name: Build (Parcel)
+				run: npx parcel build "source/index.html" --dist-dir "dist" --public-url "/"
+
+			- name: Run tests (if defined)
+				run: |
+					if npm run | grep -q "test"; then
+						npm test
+					else
+						echo "No tests defined"
+					fi
+
+			- name: Upload dist artifact
+				uses: actions/upload-artifact@v4
+				with:
+					name: dist
+					path: dist
+

@@ -13,5 +13,8 @@
     "htmlhint": "^1.9.2",
     "parcel": "^2.16.4",
     "stylelint": "^17.11.1"
+  },
+  "dependencies": {
+    "ci": "^2.3.0"
   }
 }
